@@ -1,0 +1,27 @@
+{
+  "name": "java.properties.js",
+  "main": "java.properties.js",
+  "version": "0.0.1",
+  "homepage": "https://github.com/willemdewit/java.properties.js",
+  "authors": [
+    "Willem de Wit"
+  ],
+  "description": "Converts a Java Properties file to Javascript Object",
+  "moduleType": [
+    "amd",
+    "es6"
+  ],
+  "keywords": [
+    "java",
+    "properties",
+    "javascript"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
