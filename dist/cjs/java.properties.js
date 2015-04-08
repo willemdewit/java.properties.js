@@ -34,6 +34,9 @@ function propertiesToObject(propertiesFile) {
 
 	    for(; i < props.length - 1; i++) {
 	        prop = props[i];
+	        if (!obj[prop]) {
+	        	obj[prop] = {};
+	        }
 	        obj = obj[prop];
 	    }
 	    
