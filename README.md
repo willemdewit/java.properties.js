@@ -24,7 +24,7 @@ works best for you.
 
 - Node.JS (CJS)
 
-  `var propertiesToObject = require('java.properties')`
+  `var propertiesToObject = require('java.properties.js').default`
 
 - Globals
 

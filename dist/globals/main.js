@@ -2,6 +2,7 @@
 "use strict";
 function propertiesToObject(propertiesFile) {
 	var propertyMap = {},
+		returnMap = {},
 		lines = propertiesFile.split(/\r?\n/),
 		currentLine = '',
 		matches;
@@ -27,7 +28,23 @@ function propertiesToObject(propertiesFile) {
 		}
 	});
 	
-	return propertyMap;
+	function assignProperty(obj, path, value) {
+	    var props = path.split(".")
+	        , i = 0
+	        , prop;
+
+	    for(; i < props.length - 1; i++) {
+	        prop = props[i];
+	        obj = obj[prop];
+	    }
+	    
+	    obj[props[i]] = value;
+	}
+	Object.keys(propertyMap).forEach(function (key) {
+		assignProperty(returnMap, key, propertyMap[key]);
+	}, this);
+	
+	return returnMap;
 };
 exports.propertiesToObject = propertiesToObject;exports["default"] = propertiesToObject;
 },{}]},{},[1])

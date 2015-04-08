@@ -1,0 +1,28 @@
+{
+  "name": "java.properties.js",
+  "version": "0.0.3",
+  "description": "Converts a java properties string into a POJO",
+  "main": "dist/cjs/java.properties.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/willemdewit/java.properties.js"
+  },
+  "keywords": [
+    "java",
+    "properties",
+    "i18n"
+  ],
+  "author": "Willem de Wit",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/willemdewit/java.properties.js/issues"
+  },
+  "homepage": "https://github.com/willemdewit/java.properties.js",
+  "devDependencies": {
+    "broccoli": "^0.15.3",
+    "broccoli-dist-es6-module": "^0.2.1"
+  }
+}
