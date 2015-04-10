@@ -12,6 +12,10 @@ Installation
 
 `bower install java.properties.js`
 
+or when using npm:
+
+`npm install java.properties.js`
+
 Module Support
 --------------
 
@@ -46,5 +50,25 @@ button.add_user.disabled    = Saving...
 
 ```js
 var translations = propertiesToObject(messages);
-
+// result
+{
+  "user": {
+  	"edit": {
+  	  "title": "Edit user"
+  	},
+  	"followers": {
+  	  "title": {
+  	    "one": "One Follower",
+  	    "other": "All {{count}} Followers"
+  	  }
+  	}
+  },
+  "button": {
+    "add_user": {
+    	"title": "Add a user",
+    	"text": "Add",
+    	"disabled": "Saving..."
+    }
+  }
+}
 ```

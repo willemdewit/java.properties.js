@@ -1,6 +1,6 @@
 {
   "name": "java.properties.js",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Converts a java properties string into a POJO",
   "main": "dist/cjs/java.properties.js",
   "scripts": {
