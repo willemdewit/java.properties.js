@@ -5,7 +5,7 @@ Converts a java properties file to a Javascript Object
 
 It can be used client-side and server-side.
 
-This lib can be usefull for i18n-properties files.
+This lib can be useful for i18n-properties files.
 
 Installation
 ------------
@@ -46,6 +46,10 @@ user.followers.title.other  = All {{count}} Followers
 button.add_user.title       = Add a user
 button.add_user.text        = Add
 button.add_user.disabled    = Saving...
+# You can add comments like this,
+! or with comments
+longvalue                   = You can even use \
+                                multi-line strings!
 ```
 
 ```js
@@ -53,22 +57,23 @@ var translations = propertiesToObject(messages);
 // result
 {
   "user": {
-  	"edit": {
-  	  "title": "Edit user"
-  	},
-  	"followers": {
-  	  "title": {
-  	    "one": "One Follower",
-  	    "other": "All {{count}} Followers"
-  	  }
-  	}
+    "edit": {
+      "title": "Edit user"
+    },
+    "followers": {
+      "title": {
+        "one": "One Follower",
+        "other": "All {{count}} Followers"
+      }
+    }
   },
   "button": {
     "add_user": {
-    	"title": "Add a user",
-    	"text": "Add",
-    	"disabled": "Saving..."
+      "title": "Add a user",
+      "text": "Add",
+      "disabled": "Saving..."
     }
-  }
+  },
+  "longvalue": "You can even use multi-line strings!"
 }
 ```
