@@ -17,8 +17,11 @@ test('should fail when argument is not a string', (assert) => {
 
 test('it should add single key values', (assert) => {
     assert.deepEqual(pToO('test=value'), { test: 'value' }, 'Without spaces');
+    assert.deepEqual(pToO('test:value'), { test: 'value' }, 'Without spaces with colon as separator');
     assert.deepEqual(pToO('test = value'), { test: 'value' }, 'With spaces');
+    assert.deepEqual(pToO('    test = value'), { test: 'value' }, 'White-space at begin is ignored');
     assert.deepEqual(pToO(' test         = value'), { test: 'value' }, 'With tabs');
+    assert.deepEqual(pToO('test=value '), { test: 'value ' }, 'White space following the property value is not ignored, and is treated as part of the property value.');
 
     assert.end();
 });
@@ -48,6 +51,7 @@ test('it should skip comment lines', (assert) => {
 
 test('it should be able to parse multi-line values', (assert) => {
     assert.deepEqual(pToO('key1 = this is a value \\\n spanning multiple lines'), { key1: 'this is a value spanning multiple lines'});
+    assert.deepEqual(pToO('withBackslash=value with \\\ backslash'), { withBackslash: `value with \\ backslash` }, 'Backslash should be escaped');
 
     assert.end();
 });
