@@ -51,7 +51,16 @@ test('it should skip comment lines', (assert) => {
 
 test('it should be able to parse multi-line values', (assert) => {
     assert.deepEqual(pToO('key1 = this is a value \\\n spanning multiple lines'), { key1: 'this is a value spanning multiple lines'});
-    assert.deepEqual(pToO('withBackslash=value with \\\ backslash'), { withBackslash: `value with \\ backslash` }, 'Backslash should be escaped');
+    assert.deepEqual(pToO('withBackslash=value with \\\ backslash'), { withBackslash: 'value with \\ backslash' }, 'Backslash should be escaped');
+
+    assert.end();
+});
+
+test('it should parse values with specific type', (assert) => {
+    assert.strictEqual(pToO('numeric=124').numeric, 124, 'Numeric value should be parsed as numeric');
+    assert.strictEqual(pToO('float=1.24').float, 1.24, 'Float value should be parsed as float');
+    assert.strictEqual(pToO('bool=true').bool, true, 'True value should be parsed as boolean');
+    assert.strictEqual(pToO('bool=false').bool, false, 'False value should be parsed as boolean');
 
     assert.end();
 });

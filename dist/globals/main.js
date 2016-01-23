@@ -15,6 +15,18 @@ function assignProperty(obj, path, value) {
     obj[props[i]] = value;
 }
 
+function parseValue(value) {
+    if (['true', 'false'].indexOf(value) > -1) {
+        return value === 'true';
+    }
+    // is it float parseble?
+    var parsed = parseFloat(value);
+    if (!isNaN(parsed)) {
+        return parsed;
+    }
+    return value;
+}
+
 function propertiesToObject(propertiesFile) {
     var propertyMap, returnMap, lines, currentLine, matches;
 
@@ -54,7 +66,7 @@ function propertiesToObject(propertiesFile) {
 
 
     Object.keys(propertyMap).forEach(function (key) {
-        assignProperty(returnMap, key, propertyMap[key]);
+        assignProperty(returnMap, key, parseValue(propertyMap[key]));
     }, this);
 
     return returnMap;
