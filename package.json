@@ -34,5 +34,6 @@
     "pretest": "rm -rf dist && broccoli build dist",
     "test": "tape test/*.js | tap-spec",
     "watch": "npm-watch"
-  }
+  },
+  "tonicExampleFilename": "example/tonic.js"
 }
