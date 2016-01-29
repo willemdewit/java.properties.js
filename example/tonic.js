@@ -1,4 +1,4 @@
-var propertiesToObject = require('../dist/cjs/java.properties').default;
+var propertiesToObject = require('java.properties.js').default;
 
 var properties = '# i18n messages \n\
 user.edit.title             = Edit User\n\
