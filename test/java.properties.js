@@ -50,7 +50,7 @@ test('it should skip comment lines', (assert) => {
 });
 
 test('it should be able to parse multi-line values', (assert) => {
-    assert.deepEqual(pToO('key1 = this is a value \\\n spanning multiple lines'), { key1: 'this is a value spanning multiple lines'});
+    assert.deepEqual(pToO('key1 = this is a value \\\n    spanning multiple lines'), { key1: 'this is a value spanning multiple lines'});
     assert.deepEqual(pToO('withBackslash=value with \\\ backslash'), { withBackslash: 'value with \\ backslash' }, 'Backslash should be escaped');
 
     assert.end();
