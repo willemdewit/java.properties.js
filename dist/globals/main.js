@@ -73,14 +73,17 @@ function makeDeepStructure(obj) {
  * @returns {String[]}
  */
 function combineMultiLines(lines) {
-    return lines.slice().map(function (line, idx, arr) {
-        if (isLineContinued(line)) { // line ends with an odd number of '\' (backslash)
-            line = line.replace(/\\$/, ''); // line ends with continuation character
-            line += arr[idx + 1];
-            arr.splice(idx, 1);
+    return lines.reduce(function(acc, cur) {
+        var line = acc[acc.length - 1];
+        if (acc.length && isLineContinued(line)) {
+            acc[acc.length - 1] = line.replace(/\\$/, '');
+            acc[acc.length - 1] += cur;
         }
-        return line;
-    }).filter(Boolean);
+        else {
+            acc.push(cur);
+        }
+        return acc;
+    }, []);
 }
 
 /**
@@ -114,6 +117,9 @@ function parseLines(lines) {
     var propertyMap = {};
     lines.forEach(function (line) {
         var parsed = parseLine(line);
+        if (!parsed) {
+            throw 'Cannot parse line: ' + line;
+        }
         propertyMap[parsed[1]] = parsed[2];
     });
     return propertyMap;
@@ -135,8 +141,8 @@ function propertiesToObject(propertiesFile) {
 
     return returnMap;
 }
-
-exports.propertiesToObject = propertiesToObject;exports["default"] = propertiesToObject;
+exports.propertiesToObject = propertiesToObject;
+exports["default"] = propertiesToObject;
 },{}]},{},[1])
 (1)
 });

@@ -5,7 +5,7 @@ define(
     function assignProperty(obj, path, value) {
         var props, i, prop;
         props = path.split('.');
-
+    
         for (i = 0; i < props.length - 1; i++) {
             prop = props[i];
             if (!obj[prop]) {
@@ -13,10 +13,10 @@ define(
             }
             obj = obj[prop];
         }
-
+    
         obj[props[i]] = value;
     }
-
+    
     /**
      * Tries to parse the value to a primitive type
      * @param value {String} value to parse
@@ -33,7 +33,7 @@ define(
         }
         return value;
     }
-
+    
     /**
      * Validates whether the line is a comment (prefixed by # or !)
      * @param line {String} the line
@@ -42,7 +42,7 @@ define(
     function isLineComment(line) {
         return /^\s*(\#|\!|$)/.test(line);
     }
-
+    
     /**
      * Validates whether the line has continuation character (backslash) at end
      * @param line {String} the line
@@ -51,7 +51,7 @@ define(
     function isLineContinued(line) {
         return /(\\\\)*\\$/.test(line);
     }
-
+    
     /**
      * Parses the line to a key and value
      * @param line {String} the line
@@ -60,7 +60,7 @@ define(
     function parseLine(line) {
         return /^\s*((?:[^\s:=\\]|\\.)+)\s*[:=\s]\s*(.*)$/.exec(line);
     }
-
+    
     function makeDeepStructure(obj) {
         var returnMap = {};
         Object.keys(obj).forEach(function (key) {
@@ -68,23 +68,26 @@ define(
         }, this);
         return returnMap;
     }
-
+    
     /**
      * Combines lines which end with a backslash with the next line
      * @param lines {String[]}
      * @returns {String[]}
      */
     function combineMultiLines(lines) {
-        return lines.slice().map(function (line, idx, arr) {
-            if (isLineContinued(line)) { // line ends with an odd number of '\' (backslash)
-                line = line.replace(/\\$/, ''); // line ends with continuation character
-                line += arr[idx + 1];
-                arr.splice(idx, 1);
+        return lines.reduce(function(acc, cur) {
+            var line = acc[acc.length - 1];
+            if (acc.length && isLineContinued(line)) {
+                acc[acc.length - 1] = line.replace(/\\$/, '');
+                acc[acc.length - 1] += cur;
             }
-            return line;
-        }).filter(Boolean);
+            else {
+                acc.push(cur);
+            }
+            return acc;
+        }, []);
     }
-
+    
     /**
      * Removes leading white-space of every line
      * @param lines {String[]}
@@ -95,7 +98,7 @@ define(
             return line.replace(/^\s*/, ''); // remove space at start of line
         });
     }
-
+    
     /**
      * Filters out the comment lines
      * @param lines {String[]}
@@ -106,7 +109,7 @@ define(
             return !isLineComment(line);
         });
     }
-
+    
     /**
      * Parses the lines add adds the key-values to the return object
      * @param lines {String[]}
@@ -116,27 +119,30 @@ define(
         var propertyMap = {};
         lines.forEach(function (line) {
             var parsed = parseLine(line);
+            if (!parsed) {
+                throw 'Cannot parse line: ' + line;
+            }
             propertyMap[parsed[1]] = parsed[2];
         });
         return propertyMap;
     }
-
+    
     function propertiesToObject(propertiesFile) {
         var returnMap, lines;
-
+    
         if (typeof propertiesFile !== 'string') {
             throw new Error('Cannot parse java-properties when it is not a string');
         }
-
+    
         lines = propertiesFile.split(/\r?\n/);
         lines = removeLeadingWhitespace(lines);
         lines = filterOutComments(lines);
         lines = combineMultiLines(lines);
-
+    
         returnMap = makeDeepStructure(parseLines(lines));
-
+    
         return returnMap;
     }
-
-    __exports__.propertiesToObject = propertiesToObject;__exports__["default"] = propertiesToObject;
+    __exports__.propertiesToObject = propertiesToObject;
+    __exports__["default"] = propertiesToObject;
   });
