@@ -12,6 +12,8 @@ test('should fail when argument is not a string', (assert) => {
     assert.throws(() => pToO(null), 'Cannot parse java-properties when it is not a string');
     assert.throws(() => pToO(123), 'Cannot parse java-properties when it is not a string');
 
+    assert.throws(() => pToO('asdf'), 'Cannot parse line');
+
     assert.end();
 });
 

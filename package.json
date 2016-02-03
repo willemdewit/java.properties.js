@@ -21,6 +21,7 @@
   "homepage": "https://github.com/willemdewit/java.properties.js",
   "devDependencies": {
     "babel-cli": "^6.4.5",
+    "babel-plugin-array-includes": "^2.0.3",
     "babel-plugin-transform-es2015-modules-amd": "^6.4.3",
     "babel-plugin-transform-es2015-modules-commonjs": "^6.4.5",
     "babel-plugin-transform-es2015-modules-systemjs": "^6.4.0",
@@ -40,7 +41,7 @@
     "build-cjs": "babel --plugins transform-es2015-modules-commonjs lib/java.properties.js -o dist/cjs/java.properties.js",
     "build-systemjs": "babel --plugins transform-es2015-modules-systemjs lib/java.properties.js -o dist/systemjs/main.js",
     "build-umd": "babel --plugins transform-es2015-modules-umd lib/java.properties.js -o dist/umd/java.properties.js",
-    "pretest": "npm run build",
+    "pretest": "npm run build-cjs",
     "test": "tape test/*.js | tap-spec",
     "watch": "npm-watch"
   },

@@ -2,20 +2,16 @@
 
 System.register([], function (_export, _context) {
     function assignProperty(obj, path, value) {
-        var props, i, prop;
-        props = path.split('.');
-
-        for (i = 0; i < props.length - 1; i++) {
-            prop = props[i];
-
-            if (!obj[prop]) {
-                obj[prop] = {};
+        var props = path.split('.');
+        var key = props.pop();
+        obj = props.reduce(function (newObj, prop) {
+            if (!newObj[prop]) {
+                newObj[prop] = {};
             }
 
-            obj = obj[prop];
-        }
-
-        obj[props[i]] = value;
+            return newObj[prop];
+        }, obj);
+        obj[key] = value;
     }
 
     function parseValue(value) {

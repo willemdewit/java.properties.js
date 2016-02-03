@@ -5,27 +5,25 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.propertiesToObject = propertiesToObject;
 function assignProperty(obj, path, value) {
-    var props, i, prop;
-    props = path.split('.');
-
-    for (i = 0; i < props.length - 1; i++) {
-        prop = props[i];
-        if (!obj[prop]) {
-            obj[prop] = {};
+    var props = path.split('.');
+    var key = props.pop();
+    obj = props.reduce(function (newObj, prop) {
+        if (!newObj[prop]) {
+            newObj[prop] = {};
         }
-        obj = obj[prop];
-    }
+        return newObj[prop];
+    }, obj);
 
-    obj[props[i]] = value;
+    obj[key] = value;
 }
 
 /**
- * Tries to parse the value to a primitive type
+ * Tries to parse the value to a primitive type. It converts "true" and "false" to a boolean, and "2" to a number.
  * @param value {String} value to parse
  * @returns {Boolean|Number|String} parsed value
  */
 function parseValue(value) {
-    if (['true', 'false'].indexOf(value) > -1) {
+    if (['true', 'false'].indexOf(value) !== -1) {
         return value === 'true';
     }
     // is it float parseble?
@@ -66,12 +64,19 @@ function parseLine(line) {
     );
 }
 
+/**
+ * Makes a deep structured object from a shallow object with dot-separated keys:
+ *   { "key.with.nesting": "value" }
+ *   becomes:
+ *   { "key": { "with": { "nesting": "value" } } }
+ * @param obj
+ * @returns {{}}
+ */
 function makeDeepStructure(obj) {
-    var returnMap = {};
-    Object.keys(obj).forEach(function (key) {
-        assignProperty(returnMap, key, parseValue(obj[key]));
-    }, this);
-    return returnMap;
+    return Object.keys(obj).reduce(function (nested, key) {
+        assignProperty(nested, key, obj[key]);
+        return nested;
+    }, {});
 }
 
 /**
@@ -124,28 +129,26 @@ function parseLines(lines) {
     lines.forEach(function (line) {
         var parsed = parseLine(line);
         if (!parsed) {
-            throw 'Cannot parse line: ' + line;
+            throw new Error('Cannot parse line: ', line);
         }
         propertyMap[parsed[1]] = parsed[2];
     });
     return propertyMap;
 }
 
-function propertiesToObject(propertiesFile) {
-    var returnMap, lines;
+function parseValues(obj) {
+    Object.keys(obj).forEach(function (key) {
+        obj[key] = parseValue(obj[key]);
+    });
+    return obj;
+}
 
+function propertiesToObject(propertiesFile) {
     if (typeof propertiesFile !== 'string') {
         throw new Error('Cannot parse java-properties when it is not a string');
     }
 
-    lines = propertiesFile.split(/\r?\n/);
-    lines = removeLeadingWhitespace(lines);
-    lines = filterOutComments(lines);
-    lines = combineMultiLines(lines);
-
-    returnMap = makeDeepStructure(parseLines(lines));
-
-    return returnMap;
+    return makeDeepStructure(parseValues(parseLines(combineMultiLines(filterOutComments(removeLeadingWhitespace(propertiesFile.split(/\r?\n/)))))));
 }
 
 exports.default = propertiesToObject;
