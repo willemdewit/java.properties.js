@@ -104,8 +104,8 @@ function combineMultiLines(lines) {
  */
 function removeLeadingWhitespace(lines) {
     return lines.map(function (line) {
-        return line.replace(/^\s*/, ''); // remove space at start of line
-    });
+        return line.replace(/^\s*/, '');
+    }); // remove space at start of line
 }
 
 /**

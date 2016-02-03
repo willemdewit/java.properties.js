@@ -32,7 +32,7 @@
     }
 
     function parseValue(value) {
-        if (['true', 'false'].indexOf(value) > -1) {
+        if (['true', 'false'].indexOf(value) !== -1) {
             return value === 'true';
         }
 
@@ -61,11 +61,10 @@
     }
 
     function makeDeepStructure(obj) {
-        var returnMap = {};
-        Object.keys(obj).forEach(function (key) {
-            assignProperty(returnMap, key, parseValue(obj[key]));
-        }, this);
-        return returnMap;
+        return Object.keys(obj).reduce(function (nested, key) {
+            assignProperty(nested, key, obj[key]);
+            return nested;
+        }, {});
     }
 
     function combineMultiLines(lines) {
@@ -101,7 +100,7 @@
             var parsed = parseLine(line);
 
             if (!parsed) {
-                throw 'Cannot parse line: ' + line;
+                throw new Error('Cannot parse line: ', line);
             }
 
             propertyMap[parsed[1]] = parsed[2];
@@ -109,19 +108,19 @@
         return propertyMap;
     }
 
-    function propertiesToObject(propertiesFile) {
-        var returnMap, lines;
+    function parseValues(obj) {
+        Object.keys(obj).forEach(function (key) {
+            obj[key] = parseValue(obj[key]);
+        });
+        return obj;
+    }
 
+    function propertiesToObject(propertiesFile) {
         if (typeof propertiesFile !== 'string') {
             throw new Error('Cannot parse java-properties when it is not a string');
         }
 
-        lines = propertiesFile.split(/\r?\n/);
-        lines = removeLeadingWhitespace(lines);
-        lines = filterOutComments(lines);
-        lines = combineMultiLines(lines);
-        returnMap = makeDeepStructure(parseLines(lines));
-        return returnMap;
+        return makeDeepStructure(parseValues(parseLines(combineMultiLines(filterOutComments(removeLeadingWhitespace(propertiesFile.split(/\r?\n/)))))));
     }
 
     exports.default = propertiesToObject;

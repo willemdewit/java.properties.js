@@ -15,7 +15,7 @@ System.register([], function (_export, _context) {
     }
 
     function parseValue(value) {
-        if (['true', 'false'].indexOf(value) > -1) {
+        if (['true', 'false'].indexOf(value) !== -1) {
             return value === 'true';
         }
 
@@ -44,11 +44,10 @@ System.register([], function (_export, _context) {
     }
 
     function makeDeepStructure(obj) {
-        var returnMap = {};
-        Object.keys(obj).forEach(function (key) {
-            assignProperty(returnMap, key, parseValue(obj[key]));
-        }, this);
-        return returnMap;
+        return Object.keys(obj).reduce(function (nested, key) {
+            assignProperty(nested, key, obj[key]);
+            return nested;
+        }, {});
     }
 
     function combineMultiLines(lines) {
@@ -84,7 +83,7 @@ System.register([], function (_export, _context) {
             var parsed = parseLine(line);
 
             if (!parsed) {
-                throw 'Cannot parse line: ' + line;
+                throw new Error('Cannot parse line: ', line);
             }
 
             propertyMap[parsed[1]] = parsed[2];
@@ -92,22 +91,22 @@ System.register([], function (_export, _context) {
         return propertyMap;
     }
 
+    function parseValues(obj) {
+        Object.keys(obj).forEach(function (key) {
+            obj[key] = parseValue(obj[key]);
+        });
+        return obj;
+    }
+
     return {
         setters: [],
         execute: function () {
             function propertiesToObject(propertiesFile) {
-                var returnMap, lines;
-
                 if (typeof propertiesFile !== 'string') {
                     throw new Error('Cannot parse java-properties when it is not a string');
                 }
 
-                lines = propertiesFile.split(/\r?\n/);
-                lines = removeLeadingWhitespace(lines);
-                lines = filterOutComments(lines);
-                lines = combineMultiLines(lines);
-                returnMap = makeDeepStructure(parseLines(lines));
-                return returnMap;
+                return makeDeepStructure(parseValues(parseLines(combineMultiLines(filterOutComments(removeLeadingWhitespace(propertiesFile.split(/\r?\n/)))))));
             }
 
             _export('propertiesToObject', propertiesToObject);
