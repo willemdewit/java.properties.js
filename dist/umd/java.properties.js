@@ -1,66 +1,69 @@
-define("java-properties",
-  ["exports"],
-  function(__exports__) {
-    "use strict";
+(function (global, factory) {
+    if (typeof define === "function" && define.amd) {
+        define(['exports'], factory);
+    } else if (typeof exports !== "undefined") {
+        factory(exports);
+    } else {
+        var mod = {
+            exports: {}
+        };
+        factory(mod.exports);
+        global.javaProperties = mod.exports;
+    }
+})(this, function (exports) {
+    'use strict';
+
+    Object.defineProperty(exports, "__esModule", {
+        value: true
+    });
+    exports.propertiesToObject = propertiesToObject;
+
     function assignProperty(obj, path, value) {
         var props, i, prop;
         props = path.split('.');
-    
+
         for (i = 0; i < props.length - 1; i++) {
             prop = props[i];
+
             if (!obj[prop]) {
                 obj[prop] = {};
             }
+
             obj = obj[prop];
         }
-    
+
         obj[props[i]] = value;
     }
-    
-    /**
-     * Tries to parse the value to a primitive type
-     * @param value {String} value to parse
-     * @returns {Boolean|Number|String} parsed value
-     */
+
     function parseValue(value) {
         if (['true', 'false'].indexOf(value) > -1) {
             return value === 'true';
         }
-        // is it float parseble?
+
         var parsed = parseFloat(value);
+
         if (!isNaN(parsed)) {
             return parsed;
         }
+
         return value;
     }
-    
-    /**
-     * Validates whether the line is a comment (prefixed by # or !)
-     * @param line {String} the line
-     * @returns {Boolean} whether the line is a comment
-     */
+
     function isLineComment(line) {
-        return /^\s*(\#|\!|$)/.test(line);
+        return (/^\s*(\#|\!|$)/.test(line)
+        );
     }
-    
-    /**
-     * Validates whether the line has continuation character (backslash) at end
-     * @param line {String} the line
-     * @returns {Boolean} whether the line is continued on the next line
-     */
+
     function isLineContinued(line) {
-        return /(\\\\)*\\$/.test(line);
+        return (/(\\\\)*\\$/.test(line)
+        );
     }
-    
-    /**
-     * Parses the line to a key and value
-     * @param line {String} the line
-     * @returns {Array} array with following structure: [line, key, value]
-     */
+
     function parseLine(line) {
-        return /^\s*((?:[^\s:=\\]|\\.)+)\s*[:=\s]\s*(.*)$/.exec(line);
+        return (/^\s*((?:[^\s:=\\]|\\.)+)\s*[:=\s]\s*(.*)$/.exec(line)
+        );
     }
-    
+
     function makeDeepStructure(obj) {
         var returnMap = {};
         Object.keys(obj).forEach(function (key) {
@@ -68,81 +71,62 @@ define("java-properties",
         }, this);
         return returnMap;
     }
-    
-    /**
-     * Combines lines which end with a backslash with the next line
-     * @param lines {String[]}
-     * @returns {String[]}
-     */
+
     function combineMultiLines(lines) {
-        return lines.reduce(function(acc, cur) {
+        return lines.reduce(function (acc, cur) {
             var line = acc[acc.length - 1];
+
             if (acc.length && isLineContinued(line)) {
                 acc[acc.length - 1] = line.replace(/\\$/, '');
                 acc[acc.length - 1] += cur;
-            }
-            else {
+            } else {
                 acc.push(cur);
             }
+
             return acc;
         }, []);
     }
-    
-    /**
-     * Removes leading white-space of every line
-     * @param lines {String[]}
-     * @returns {String[]}
-     */
+
     function removeLeadingWhitespace(lines) {
         return lines.map(function (line) {
-            return line.replace(/^\s*/, ''); // remove space at start of line
+            return line.replace(/^\s*/, '');
         });
     }
-    
-    /**
-     * Filters out the comment lines
-     * @param lines {String[]}
-     * @returns {String[]}
-     */
+
     function filterOutComments(lines) {
         return lines.filter(function (line) {
             return !isLineComment(line);
         });
     }
-    
-    /**
-     * Parses the lines add adds the key-values to the return object
-     * @param lines {String[]}
-     * @returns {{}} the parsed key-value pairs
-     */
+
     function parseLines(lines) {
         var propertyMap = {};
         lines.forEach(function (line) {
             var parsed = parseLine(line);
+
             if (!parsed) {
                 throw 'Cannot parse line: ' + line;
             }
+
             propertyMap[parsed[1]] = parsed[2];
         });
         return propertyMap;
     }
-    
+
     function propertiesToObject(propertiesFile) {
         var returnMap, lines;
-    
+
         if (typeof propertiesFile !== 'string') {
             throw new Error('Cannot parse java-properties when it is not a string');
         }
-    
+
         lines = propertiesFile.split(/\r?\n/);
         lines = removeLeadingWhitespace(lines);
         lines = filterOutComments(lines);
         lines = combineMultiLines(lines);
-    
         returnMap = makeDeepStructure(parseLines(lines));
-    
         return returnMap;
     }
-    __exports__.propertiesToObject = propertiesToObject;
-    __exports__["default"] = propertiesToObject;
-  });
+
+    exports.default = propertiesToObject;
+});

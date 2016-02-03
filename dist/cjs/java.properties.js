@@ -1,4 +1,9 @@
-"use strict";
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.propertiesToObject = propertiesToObject;
 function assignProperty(obj, path, value) {
     var props, i, prop;
     props = path.split('.');
@@ -37,7 +42,8 @@ function parseValue(value) {
  * @returns {Boolean} whether the line is a comment
  */
 function isLineComment(line) {
-    return /^\s*(\#|\!|$)/.test(line);
+    return (/^\s*(\#|\!|$)/.test(line)
+    );
 }
 
 /**
@@ -46,7 +52,8 @@ function isLineComment(line) {
  * @returns {Boolean} whether the line is continued on the next line
  */
 function isLineContinued(line) {
-    return /(\\\\)*\\$/.test(line);
+    return (/(\\\\)*\\$/.test(line)
+    );
 }
 
 /**
@@ -55,7 +62,8 @@ function isLineContinued(line) {
  * @returns {Array} array with following structure: [line, key, value]
  */
 function parseLine(line) {
-    return /^\s*((?:[^\s:=\\]|\\.)+)\s*[:=\s]\s*(.*)$/.exec(line);
+    return (/^\s*((?:[^\s:=\\]|\\.)+)\s*[:=\s]\s*(.*)$/.exec(line)
+    );
 }
 
 function makeDeepStructure(obj) {
@@ -72,13 +80,12 @@ function makeDeepStructure(obj) {
  * @returns {String[]}
  */
 function combineMultiLines(lines) {
-    return lines.reduce(function(acc, cur) {
+    return lines.reduce(function (acc, cur) {
         var line = acc[acc.length - 1];
         if (acc.length && isLineContinued(line)) {
             acc[acc.length - 1] = line.replace(/\\$/, '');
             acc[acc.length - 1] += cur;
-        }
-        else {
+        } else {
             acc.push(cur);
         }
         return acc;
@@ -140,5 +147,5 @@ function propertiesToObject(propertiesFile) {
 
     return returnMap;
 }
-exports.propertiesToObject = propertiesToObject;
-exports["default"] = propertiesToObject;
+
+exports.default = propertiesToObject;

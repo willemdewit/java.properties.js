@@ -20,8 +20,12 @@
   },
   "homepage": "https://github.com/willemdewit/java.properties.js",
   "devDependencies": {
-    "broccoli": "^0.15.3",
-    "broccoli-dist-es6-module": "^0.2.1",
+    "babel-cli": "^6.4.5",
+    "babel-plugin-transform-es2015-modules-amd": "^6.4.3",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.4.5",
+    "babel-plugin-transform-es2015-modules-systemjs": "^6.4.0",
+    "babel-plugin-transform-es2015-modules-umd": "^6.4.3",
+    "babel-preset-es2015": "^6.3.13",
     "covert": "^1.1.0",
     "npm-watch": "^0.1.1",
     "tap-spec": "^4.1.1",
@@ -31,7 +35,12 @@
     "test": "{lib,test}/*.js"
   },
   "scripts": {
-    "pretest": "rm -rf dist && broccoli build dist",
+    "build": "npm run build-amd && npm run build-cjs && npm run build-systemjs && npm run build-umd",
+    "build-amd": "babel --plugins transform-es2015-modules-amd lib/java.properties.js -o dist/amd/java.properties.js",
+    "build-cjs": "babel --plugins transform-es2015-modules-commonjs lib/java.properties.js -o dist/cjs/java.properties.js",
+    "build-systemjs": "babel --plugins transform-es2015-modules-systemjs lib/java.properties.js -o dist/systemjs/main.js",
+    "build-umd": "babel --plugins transform-es2015-modules-umd lib/java.properties.js -o dist/umd/java.properties.js",
+    "pretest": "npm run build",
     "test": "tape test/*.js | tap-spec",
     "watch": "npm-watch"
   },

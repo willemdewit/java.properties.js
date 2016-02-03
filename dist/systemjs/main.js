@@ -1,11 +1,6 @@
-define(['exports'], function (exports) {
-    'use strict';
+'use strict';
 
-    Object.defineProperty(exports, "__esModule", {
-        value: true
-    });
-    exports.propertiesToObject = propertiesToObject;
-
+System.register([], function (_export, _context) {
     function assignProperty(obj, path, value) {
         var props, i, prop;
         props = path.split('.');
@@ -101,20 +96,27 @@ define(['exports'], function (exports) {
         return propertyMap;
     }
 
-    function propertiesToObject(propertiesFile) {
-        var returnMap, lines;
+    return {
+        setters: [],
+        execute: function () {
+            function propertiesToObject(propertiesFile) {
+                var returnMap, lines;
 
-        if (typeof propertiesFile !== 'string') {
-            throw new Error('Cannot parse java-properties when it is not a string');
+                if (typeof propertiesFile !== 'string') {
+                    throw new Error('Cannot parse java-properties when it is not a string');
+                }
+
+                lines = propertiesFile.split(/\r?\n/);
+                lines = removeLeadingWhitespace(lines);
+                lines = filterOutComments(lines);
+                lines = combineMultiLines(lines);
+                returnMap = makeDeepStructure(parseLines(lines));
+                return returnMap;
+            }
+
+            _export('propertiesToObject', propertiesToObject);
+
+            _export('default', propertiesToObject);
         }
-
-        lines = propertiesFile.split(/\r?\n/);
-        lines = removeLeadingWhitespace(lines);
-        lines = filterOutComments(lines);
-        lines = combineMultiLines(lines);
-        returnMap = makeDeepStructure(parseLines(lines));
-        return returnMap;
-    }
-
-    exports.default = propertiesToObject;
+    };
 });
