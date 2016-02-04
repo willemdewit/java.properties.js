@@ -1,6 +1,17 @@
 'use strict';
 
 System.register([], function (_export, _context) {
+    function compose() {
+        var fns = arguments;
+        return function (result) {
+            for (var i = fns.length - 1; i > -1; i--) {
+                result = fns[i].call(this, result);
+            }
+
+            return result;
+        };
+    }
+
     function assignProperty(obj, path, value) {
         var props = path.split('.');
         var key = props.pop();
@@ -106,7 +117,8 @@ System.register([], function (_export, _context) {
                     throw new Error('Cannot parse java-properties when it is not a string');
                 }
 
-                return makeDeepStructure(parseValues(parseLines(combineMultiLines(filterOutComments(removeLeadingWhitespace(propertiesFile.split(/\r?\n/)))))));
+                var pToO = compose(makeDeepStructure, parseValues, parseLines, combineMultiLines, filterOutComments, removeLeadingWhitespace);
+                return pToO(propertiesFile.split(/\r?\n/));
             }
 
             _export('propertiesToObject', propertiesToObject);

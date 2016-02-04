@@ -43,7 +43,8 @@
     "build-umd": "babel --plugins transform-es2015-modules-umd lib/java.properties.js -o dist/umd/java.properties.js",
     "pretest": "npm run build-cjs",
     "test": "tape test/*.js | tap-spec",
-    "watch": "npm-watch"
+    "watch": "npm-watch",
+    "prepublish": "npm run build"
   },
   "tonicExampleFilename": "example/tonic.js"
 }

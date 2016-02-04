@@ -4,6 +4,18 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 exports.propertiesToObject = propertiesToObject;
+function compose() {
+    var fns = arguments;
+
+    return function (result) {
+        for (var i = fns.length - 1; i > -1; i--) {
+            result = fns[i].call(this, result);
+        }
+
+        return result;
+    };
+}
+
 function assignProperty(obj, path, value) {
     var props = path.split('.');
     var key = props.pop();
@@ -143,12 +155,17 @@ function parseValues(obj) {
     return obj;
 }
 
+function makeLines(str) {
+    return str.split(/\r?\n/);
+}
+
 function propertiesToObject(propertiesFile) {
     if (typeof propertiesFile !== 'string') {
         throw new Error('Cannot parse java-properties when it is not a string');
     }
 
-    return makeDeepStructure(parseValues(parseLines(combineMultiLines(filterOutComments(removeLeadingWhitespace(propertiesFile.split(/\r?\n/)))))));
+    var pToO = compose(makeDeepStructure, parseValues, parseLines, combineMultiLines, filterOutComments, removeLeadingWhitespace, makeLines);
+    return pToO(propertiesFile);
 }
 
 exports.default = propertiesToObject;
