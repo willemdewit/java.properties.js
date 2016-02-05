@@ -1,7 +1,7 @@
 java.properties.js
 ==================
 
-Converts a java properties file to a Javascript Object
+Converts a string with the [java properties file](https://docs.oracle.com/cd/E23095_01/Platform.93/ATGProgGuide/html/s0204propertiesfileformat01.html) format to a Javascript Object
 
 It can be used client-side and server-side.
 
@@ -31,6 +31,8 @@ works best for you.
   `var propertiesToObject = require('java.properties.js').default`
 
 - Globals
+
+  `window.javaProperties`
 
 API
 ---
