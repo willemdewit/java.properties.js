@@ -1,0 +1,2 @@
+instrumentation:
+  es-modules: true
