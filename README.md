@@ -1,6 +1,8 @@
 java.properties.js
 ==================
 
+[![Build Status](https://travis-ci.org/willemdewit/java.properties.js.svg?branch=master)](https://travis-ci.org/willemdewit/java.properties.js)
+
 Converts a string with the [java properties file](https://docs.oracle.com/cd/E23095_01/Platform.93/ATGProgGuide/html/s0204propertiesfileformat01.html) format to a Javascript Object
 
 It can be used client-side and server-side.
