@@ -1,6 +1,8 @@
 'use strict';
 
 System.register([], function (_export, _context) {
+    var pToO;
+
     function compose() {
         var fns = arguments;
         return function (result) {
@@ -109,16 +111,21 @@ System.register([], function (_export, _context) {
         return obj;
     }
 
+    function makeLines(str) {
+        return str.split(/\r?\n/);
+    }
+
     return {
         setters: [],
         execute: function () {
+            pToO = compose(makeDeepStructure, parseValues, parseLines, combineMultiLines, filterOutComments, removeLeadingWhitespace, makeLines);
+
             function propertiesToObject(propertiesFile) {
                 if (typeof propertiesFile !== 'string') {
                     throw new Error('Cannot parse java-properties when it is not a string');
                 }
 
-                var pToO = compose(makeDeepStructure, parseValues, parseLines, combineMultiLines, filterOutComments, removeLeadingWhitespace);
-                return pToO(propertiesFile.split(/\r?\n/));
+                return pToO(propertiesFile);
             }
 
             _export('propertiesToObject', propertiesToObject);

@@ -114,13 +114,18 @@ define(['exports'], function (exports) {
         return obj;
     }
 
+    function makeLines(str) {
+        return str.split(/\r?\n/);
+    }
+
+    var pToO = compose(makeDeepStructure, parseValues, parseLines, combineMultiLines, filterOutComments, removeLeadingWhitespace, makeLines);
+
     function propertiesToObject(propertiesFile) {
         if (typeof propertiesFile !== 'string') {
             throw new Error('Cannot parse java-properties when it is not a string');
         }
 
-        var pToO = compose(makeDeepStructure, parseValues, parseLines, combineMultiLines, filterOutComments, removeLeadingWhitespace);
-        return pToO(propertiesFile.split(/\r?\n/));
+        return pToO(propertiesFile);
     }
 
     exports.default = propertiesToObject;
