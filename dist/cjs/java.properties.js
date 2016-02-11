@@ -148,6 +148,11 @@ function parseLines(lines) {
     return propertyMap;
 }
 
+/**
+ * Loops over the object values and tries to parse them to a native value.
+ * @param obj
+ * @returns {Object} the same object as the argument
+ */
 function parseValues(obj) {
     Object.keys(obj).forEach(function (key) {
         obj[key] = parseValue(obj[key]);
@@ -155,16 +160,22 @@ function parseValues(obj) {
     return obj;
 }
 
+/**
+ * Makes an array of strings from a string containing return-characters.
+ * @param str
+ * @returns {Array} array of lines
+ */
 function makeLines(str) {
     return str.split(/\r?\n/);
 }
+
+var pToO = compose(makeDeepStructure, parseValues, parseLines, combineMultiLines, filterOutComments, removeLeadingWhitespace, makeLines);
 
 function propertiesToObject(propertiesFile) {
     if (typeof propertiesFile !== 'string') {
         throw new Error('Cannot parse java-properties when it is not a string');
     }
 
-    var pToO = compose(makeDeepStructure, parseValues, parseLines, combineMultiLines, filterOutComments, removeLeadingWhitespace, makeLines);
     return pToO(propertiesFile);
 }
 
