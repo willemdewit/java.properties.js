@@ -2,7 +2,8 @@
   "ecmaFeatures": {
     "arrowFunctions": true,
     "blockBindings": true,
-    "modules": true
+    "modules": true,
+    "templateStrings": true
   },
   "rules": {
     "semi": 2
