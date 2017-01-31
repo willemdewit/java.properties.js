@@ -13,6 +13,10 @@
     "properties",
     "i18n"
   ],
+  "ember-addon": {
+    "main": "index.js",
+	"before": "ember-cli-babel"
+  },
   "author": "Willem de Wit",
   "license": "ISC",
   "bugs": {
