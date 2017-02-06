@@ -45,7 +45,7 @@
     "build-systemjs": "babel --plugins transform-es2015-modules-systemjs lib/java.properties.js -o dist/systemjs/main.js",
     "build-umd": "babel --plugins transform-es2015-modules-umd lib/java.properties.js -o dist/umd/java.properties.js",
     "pretest": "npm run build-cjs",
-    "test": "istanbul cover test/*.js",
+    "test": "istanbul cover test/java.properties.js",
     "posttest": "codeclimate-test-reporter < coverage/lcov.info",
     "watch": "npm-watch",
     "prepublish": "npm run build"

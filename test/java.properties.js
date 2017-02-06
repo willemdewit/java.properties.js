@@ -67,3 +67,9 @@ test('it should parse values with specific type', (assert) => {
 
     assert.end();
 });
+
+test('it should handle special characters correctly', (assert) => {
+    assert.strictEqual(pToO('special=\u00A9 or \u00FC or \u00DF').special, '© or ü or ß', 'Unicode characters should be processed');
+
+    assert.end();
+});
