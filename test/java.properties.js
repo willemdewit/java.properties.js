@@ -73,3 +73,10 @@ test('it should handle special characters correctly', (assert) => {
 
     assert.end();
 });
+
+test('it should handle escaped dots in the property name', (assert) => {
+    assert.deepEqual(pToO('test\\.test=value'), { 'test.test': 'value' }, 'Escaped dot in key');
+    assert.deepEqual(pToO('test\\\\test=value'), { 'test\\test': 'value' }, 'Escaped backslash in key');
+    assert.deepEqual(pToO('test\\test=value'), { 'testtest': 'value' }, 'Escaped normal character in key');
+    assert.end();
+});

@@ -7,6 +7,8 @@ user.followers.title.other  = All {{count}} Followers\n\
 button.add_user.title       = Add a user\n\
 button.add_user.text        = Add\n\
 button.add_user.disabled    = Saving...\n\
+button.dict.fo\\\\o         = should have a backslash\n\
+button.dict.bar\\.bar       = should have a dot\n\
 # You can add comments like this,\n\
     ! or with comments\n\
     longvalue                   = You can even use \\\n\
