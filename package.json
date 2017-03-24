@@ -48,7 +48,8 @@
     "test": "istanbul cover test/java.properties.js",
     "posttest": "codeclimate-test-reporter < coverage/lcov.info",
     "watch": "npm-watch",
-    "prepublish": "npm run build"
+    "version": "npm run build",
+    "postversion": "git push && git push --tags"
   },
   "tonicExampleFilename": "example/tonic.js"
 }
