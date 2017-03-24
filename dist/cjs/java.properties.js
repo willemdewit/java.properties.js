@@ -17,7 +17,7 @@ function compose() {
 }
 
 function assignProperty(obj, path, value) {
-    var props = path.split('.');
+    var props = splitEscaped(path, '.');
     var key = props.pop();
     obj = props.reduce(function (newObj, prop) {
         if (!newObj[prop]) {
@@ -30,6 +30,36 @@ function assignProperty(obj, path, value) {
 }
 
 /**
+ * Split a string using a separator, if not preceded by a backslash.
+ * For simplicity, this does not correctly handle two preceding backslashes
+ * @param src {String} value to parse
+ * @param separator {String} single character separator
+ * @returns []
+ */
+function splitEscaped(src, separator) {
+    var escapeFlag = false,
+        token = '',
+        result = [];
+    src.split('').forEach(function (letter) {
+        if (escapeFlag) {
+            token += letter;
+            escapeFlag = false;
+        } else if (letter === '\\') {
+            escapeFlag = true;
+        } else if (letter === separator) {
+            result.push(token);
+            token = '';
+        } else {
+            token += letter;
+        }
+    });
+    if (token.length > 0) {
+        result.push(token);
+    }
+    return result;
+}
+
+/**
  * Tries to parse the value to a primitive type. It converts "true" and "false" to a boolean, and "2" to a number.
  * @param value {String} value to parse
  * @returns {Boolean|Number|String} parsed value
@@ -38,7 +68,7 @@ function parseValue(value) {
     if (['true', 'false'].indexOf(value) !== -1) {
         return value === 'true';
     }
-    // is it float parseble?
+    // is it float parsable?
     var parsed = parseFloat(value);
     if (!isNaN(parsed)) {
         return parsed;
