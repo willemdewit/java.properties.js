@@ -71,8 +71,8 @@ define(['exports'], function (exports) {
         if (['true', 'false'].indexOf(value) !== -1) {
             return value === 'true';
         }
-        // is it float parsable?
-        if (numericRegex.test(value)) {
+        // Is it float parsable and short enough to not lose precision
+        if (numericRegex.test(value) && value.length < 15) {
             return parseFloat(value);
         }
         return value;
