@@ -3,7 +3,9 @@
 System.register([], function (_export, _context) {
     "use strict";
 
-    var pToO;
+    var numericRegex, pToO;
+
+
     function compose() {
         var fns = arguments;
 
@@ -68,10 +70,9 @@ System.register([], function (_export, _context) {
         if (['true', 'false'].indexOf(value) !== -1) {
             return value === 'true';
         }
-        // is it float parsable?
-        var parsed = parseFloat(value);
-        if (!isNaN(parsed)) {
-            return parsed;
+        // Is it float parsable and short enough to not lose precision
+        if (numericRegex.test(value) && value.length < 15) {
+            return parseFloat(value);
         }
         return value;
     }
@@ -197,7 +198,9 @@ System.register([], function (_export, _context) {
      */
     function makeLines(str) {
         return str.split(/\r?\n/);
-    }function propertiesToObject(propertiesFile) {
+    }
+
+    function propertiesToObject(propertiesFile) {
         if (typeof propertiesFile !== 'string') {
             throw new Error('Cannot parse java-properties when it is not a string');
         }
@@ -210,6 +213,7 @@ System.register([], function (_export, _context) {
     return {
         setters: [],
         execute: function () {
+            numericRegex = /^(\-|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/;
             pToO = compose(makeDeepStructure, parseValues, parseLines, combineMultiLines, filterOutComments, removeLeadingWhitespace, makeLines);
 
             _export('default', propertiesToObject);

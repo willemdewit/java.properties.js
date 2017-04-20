@@ -1,6 +1,6 @@
 {
   "name": "java.properties.js",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Converts a java properties string into a POJO",
   "main": "dist/cjs/java.properties.js",
   "jsnext:main": "lib/java.properties.js",
