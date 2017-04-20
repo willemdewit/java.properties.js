@@ -5,6 +5,8 @@ define(['exports'], function (exports) {
         value: true
     });
     exports.propertiesToObject = propertiesToObject;
+    var numericRegex = /^(\-|\+)?([0-9]+(\.[0-9]+)?|Infinity)$/;
+
     function compose() {
         var fns = arguments;
 
@@ -70,9 +72,8 @@ define(['exports'], function (exports) {
             return value === 'true';
         }
         // is it float parsable?
-        var parsed = parseFloat(value);
-        if (!isNaN(parsed)) {
-            return parsed;
+        if (numericRegex.test(value)) {
+            return parseFloat(value);
         }
         return value;
     }
