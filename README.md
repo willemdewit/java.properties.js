@@ -52,6 +52,9 @@ user.followers.title.other  = All {{count}} Followers
 button.add_user.title       = Add a user
 button.add_user.text        = Add
 button.add_user.disabled    = Saving...
+# Unicode characters are processed (e.g. '© or ü or ß' see below)
+unicode.chars               = \\u00A9 or \\u00FC or \\u00DF
+
 # You can add comments like this,
 ! or with comments
 longvalue                   = You can even use \
